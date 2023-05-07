@@ -1,0 +1,21 @@
+[
+    {
+        "id": "d767546a959d0556",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Umbrales feedback",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\n\nif (messageContent.includes(\"UmbralTemp\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Cambiando umbral de temperatura\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\n\n// Devolver el objeto `msg`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 360,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    }
+]
