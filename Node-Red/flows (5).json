@@ -1,0 +1,1246 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1d6551462a9aa13a",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "ThingSpeak",
+        "info": "",
+        "x": 110,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "c488d24609b6e533",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "Files",
+        "info": "",
+        "x": 90,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "7ec09803840a6c69",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "Telegram",
+        "info": "",
+        "x": 80,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "4ea5283a92c042fe",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "AWS",
+        "info": "",
+        "x": 530,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "2262881b48affd58",
+        "type": "amazon s3 out",
+        "z": "f6f2187d.f17ca8",
+        "aws": "",
+        "bucket": "mygreenhousebucket",
+        "filename": "log.txt",
+        "localFilename": "/data/log.txt",
+        "region": "eu-west-2",
+        "name": "",
+        "x": 590,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "4bffea23702c609e",
+        "type": "file",
+        "z": "f6f2187d.f17ca8",
+        "name": "WRITE",
+        "filename": "/data/log.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 400,
+        "y": 1080,
+        "wires": [
+            [
+                "2262881b48affd58"
+            ]
+        ]
+    },
+    {
+        "id": "d6f6e00efce13c15",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "0 9-20 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1080,
+        "wires": [
+            [
+                "81de5efb2f840272"
+            ]
+        ]
+    },
+    {
+        "id": "76449678845b95a1",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1120,
+        "wires": [
+            [
+                "8f33901bb388e5b5"
+            ]
+        ]
+    },
+    {
+        "id": "81de5efb2f840272",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "function 2",
+        "func": "var now = new Date();\nvar day = now.getDate();\nvar hour = now.getHours();\nvar month = now.getMonth() + 1; // El mes se cuenta desde 0, por eso se suma 1\nvar year = now.getFullYear();\n\nvar payload = \"-------------------------\\nFecha:\" + day + \"/\" + month + \"/\" + year +\n    \"\\nHora: \" + hour +\n    \"\\n\\nAuto:\" + flow.get(\"Auto\") + \"\\n\" +\n    \"-------Sensores-------\" +\n    \"\\nTemperatura: \" + flow.get(\"Temp\") + \"ºC\" +\n    \"\\nHumedad ambiental: \" + flow.get(\"Humi\") + \"%\" +\n    \"\\nLuminosidad: \" + flow.get(\"LDR\") + \"%\" +\n    \"\\nHumedad Suelo 0: \" + flow.get(\"SM0\") + \"%\" +\n    \"\\nHumedad Suelo 1: \" + flow.get(\"SM1\") + \"%\" +\n    \"\\nHumedad Suelo 2: \" + flow.get(\"SM2\") + \"%\" +\n    \"\\nHumedad Suelo 3: \" + flow.get(\"SM3\") + \"%\" +\n    \"\\nHumedad Suelo 4: \" + flow.get(\"SM4\") + \"%\" +\n    \"\\nHumedad Suelo 5: \" + flow.get(\"SM5\") + \"%\\n\\n\" +\n    \"-------Actuadores-------\" +\n    \"\\nPuerta: \" + flow.get(\"Puerta\") +\n    \"\\nLeds UV: \" + flow.get(\"LedsUV\") + \"\\n-------------------------\";\nmsg.payload = payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 260,
+        "y": 1080,
+        "wires": [
+            [
+                "4bffea23702c609e"
+            ]
+        ]
+    },
+    {
+        "id": "dea86863c91735d5",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Temp",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 500,
+        "wires": [
+            [
+                "21c945b4a1b22ffe"
+            ]
+        ]
+    },
+    {
+        "id": "21c945b4a1b22ffe",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Temp",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0671e927d592e50",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM0",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f0c66f1b66805186",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM0",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "b0671e927d592e50"
+            ]
+        ]
+    },
+    {
+        "id": "87190932a77385bb",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM4",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "817a6cdf8730987b",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM4",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 740,
+        "wires": [
+            [
+                "87190932a77385bb"
+            ]
+        ]
+    },
+    {
+        "id": "051a5cee8095ef1a",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM3",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9d973566d5c8b870",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM3",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 700,
+        "wires": [
+            [
+                "051a5cee8095ef1a"
+            ]
+        ]
+    },
+    {
+        "id": "ae66055202622ba3",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM2",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "84aea681f768382d",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 660,
+        "wires": [
+            [
+                "ae66055202622ba3"
+            ]
+        ]
+    },
+    {
+        "id": "3aec6dd82543d797",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM1",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "76a321a6d576b821",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 620,
+        "wires": [
+            [
+                "3aec6dd82543d797"
+            ]
+        ]
+    },
+    {
+        "id": "039f4c9ae746a99b",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "LDR",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "331a567d2d3a9346",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/LDR",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 540,
+        "wires": [
+            [
+                "039f4c9ae746a99b"
+            ]
+        ]
+    },
+    {
+        "id": "8fcb27d4c63a41ec",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Soil/SM5",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 780,
+        "wires": [
+            [
+                "cbd90ee3cdeb3867"
+            ]
+        ]
+    },
+    {
+        "id": "cbd90ee3cdeb3867",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "SM5",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "59fd05403548f6db",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "MQTT/Sensores",
+        "info": "",
+        "x": 120,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "5bf156e60dd760b0",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Sensors/Humi",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 460,
+        "wires": [
+            [
+                "779975fedf9631f1"
+            ]
+        ]
+    },
+    {
+        "id": "779975fedf9631f1",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Humi",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb33138eb9633376",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Actuators/Motor",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "dacdbc14c8414c19",
+        "x": 660,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "1b80136fcdf2f332",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Motor",
+        "func": "var messageContent = msg.payload.content;\nvar newMsg;\n\nif (messageContent.includes(\"OpenDoor\")) {\n    newMsg = {\n        payload: \"On\"\n    };\n}else if (messageContent.includes(\"CloseDoor\")) {\n    newMsg = {\n        payload: \"Off\"\n    };\n} else {\n    newMsg = null;\n}\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 40,
+        "wires": [
+            [
+                "bb33138eb9633376"
+            ]
+        ]
+    },
+    {
+        "id": "1e27e9a1714870b3",
+        "type": "telegram receiver",
+        "z": "f6f2187d.f17ca8",
+        "name": "Receiver",
+        "bot": "262bb7894dbc199c",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "x": 80,
+        "y": 120,
+        "wires": [
+            [
+                "dee9a73dfeea77b0",
+                "cebf3d427de5d571"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d8c3fc65216fdd67",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Actuators/LedUV",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "dacdbc14c8414c19",
+        "x": 670,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "45b62414b72fdaba",
+        "type": "telegram sender",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "bot": "262bb7894dbc199c",
+        "haserroroutput": true,
+        "outputs": 2,
+        "x": 630,
+        "y": 180,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b3a6ffa5f65125fa",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Sensores",
+        "func": "msg.text = \" Auto:\" + flow.get(\"Auto\") + \"\\n\" + \n    \"<b>-------Sensores-------</b>\" +\n    \"\\nTemperatura: \" + flow.get(\"Temp\") + \"ºC\" + \n    \"\\nHumedad ambiental: \" + flow.get(\"Humi\") + \"%\" +\n    \"\\nLuminosidad: \" + flow.get(\"LDR\") + \"%\" +\n    \"\\nHumedad Suelo 0: \" + flow.get(\"SM0\") + \"%\" +\n    \"\\nHumedad Suelo 1: \" + flow.get(\"SM1\") + \"%\" +\n    \"\\nHumedad Suelo 2: \" + flow.get(\"SM2\") + \"%\" +\n    \"\\nHumedad Suelo 3: \" + flow.get(\"SM3\") + \"%\" +\n    \"\\nHumedad Suelo 4: \" + flow.get(\"SM4\") + \"%\" +\n    \"\\nHumedad Suelo 5: \" + flow.get(\"SM5\") + \"%\\n\\n\" +\n    \"<b>-------Actuadores-------</b>\" +\n    \"\\nPuerta: \" + flow.get(\"Puerta\") +\n    \"\\nLeds UV: \" + flow.get(\"LedsUV\") + \"\\n\";\nvar messageContent = msg.payload.content;\nif (messageContent.includes(\"Control\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: msg.text,\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\nelse{\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 200,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    },
+    {
+        "id": "6e6c41f2e8469d43",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "LedUV ",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\nvar newMsg;\n\nif (messageContent.includes(\"OnUV\")){\n    newMsg = {\n        payload: \"On\"\n    };\n}\nelse if (messageContent.includes(\"OffUV\")){\n    newMsg = {\n        payload: \"Off\"\n    };\n}\n\n// Devolver el objeto `msg`\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 120,
+        "wires": [
+            [
+                "d8c3fc65216fdd67"
+            ]
+        ]
+    },
+    {
+        "id": "dee9a73dfeea77b0",
+        "type": "switch",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "property": "payload.content",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "oor",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "UV",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "ontrol",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "uto",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "mbral",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 5,
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "1b80136fcdf2f332",
+                "8991f7e39eedf4c3"
+            ],
+            [
+                "6e6c41f2e8469d43",
+                "d9245a8eb39d6165"
+            ],
+            [
+                "b3a6ffa5f65125fa"
+            ],
+            [
+                "b3b06f35e9bc774f",
+                "e13f3e1eb21d2587"
+            ],
+            [
+                "536a413168e409fe",
+                "d767546a959d0556"
+            ]
+        ]
+    },
+    {
+        "id": "cebf3d427de5d571",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Message",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 200,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "b3b06f35e9bc774f",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Automatismos",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\nvar newMsg;\n\nif (messageContent.includes(\"OnAuto\")) {\n    newMsg = {\n        payload: \"true\"\n    };\n}\nelse if (messageContent.includes(\"OffAuto\")) {\n    newMsg = {\n        payload: \"false\"\n    };\n}\n\n// Devolver el objeto `msg`\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 240,
+        "wires": [
+            [
+                "fa46b86184e79e5d"
+            ]
+        ]
+    },
+    {
+        "id": "fa46b86184e79e5d",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Auto",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "dacdbc14c8414c19",
+        "x": 630,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "8991f7e39eedf4c3",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Motor feedback",
+        "func": "var messageContent = msg.payload.content;\n\nif (messageContent.includes(\"OpenDoor\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Abriendo Puerta\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}else if (messageContent.includes(\"CloseDoor\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Cerrando Puerta\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 80,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    },
+    {
+        "id": "d9245a8eb39d6165",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "LedUV feedback",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\n\nif (messageContent.includes(\"OnUV\")){\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Encendiendo Leds UV\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\nelse if (messageContent.includes(\"OffUV\")){\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Apagando Leds UV\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\n\n// Devolver el objeto `msg`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    },
+    {
+        "id": "e13f3e1eb21d2587",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Auto feedback",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\n\nif (messageContent.includes(\"OnAuto\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Activando Automatismos\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\nelse if (messageContent.includes(\"OffAuto\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Desactivando Automatismos\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\n\n// Devolver el objeto `msg`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 280,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    },
+    {
+        "id": "d62f0d72a46e5a87",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Auto",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "9a4d88b1ec737a74"
+            ]
+        ]
+    },
+    {
+        "id": "9a4d88b1ec737a74",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Auto",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "481d704537328363",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "MQTT/Actuadores",
+        "info": "",
+        "x": 130,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "0e0a453547adc3dc",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "LedsUV",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "778d34150de317d4",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Actuators/LedUV",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 900,
+        "wires": [
+            [
+                "0e0a453547adc3dc"
+            ]
+        ]
+    },
+    {
+        "id": "eeb8d0477701759f",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Puerta",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0b8ae338493e8a1d",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Actuators/Motor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 860,
+        "wires": [
+            [
+                "eeb8d0477701759f"
+            ]
+        ]
+    },
+    {
+        "id": "8f33901bb388e5b5",
+        "type": "file in",
+        "z": "f6f2187d.f17ca8",
+        "name": "READ",
+        "filename": "/data/log.txt",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 250,
+        "y": 1120,
+        "wires": [
+            [
+                "4c78e2b1781c0a1c"
+            ]
+        ]
+    },
+    {
+        "id": "ee3393a88fd945f2",
+        "type": "file",
+        "z": "f6f2187d.f17ca8",
+        "name": "DELETE",
+        "filename": "/data/log.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 260,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "815289aed022da81",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 1160,
+        "wires": [
+            [
+                "ee3393a88fd945f2"
+            ]
+        ]
+    },
+    {
+        "id": "4c78e2b1781c0a1c",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Read File",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "75c287533be6f911",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Thresholds/Temp",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "dacdbc14c8414c19",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 980,
+        "wires": [
+            [
+                "30737b17beb98fd0"
+            ]
+        ]
+    },
+    {
+        "id": "30737b17beb98fd0",
+        "type": "change",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ThresholdTemp",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "66bd974183647c8b",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "MQTT/Thresholds",
+        "info": "",
+        "x": 130,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "536a413168e409fe",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Umbrales",
+        "func": "var messageContent = msg.payload.content;\nvar newMsg;\n\nif (messageContent.includes(\"UmbralTemp\")) {\n    let umbral = messageContent.match(/\\d+/)[0]; // extrae el primer número de la cadena\n    let umbralString = umbral.toString(); // convierte el número en un string\n    newMsg = {\n        payload: umbralString\n    };\n} else {\n    newMsg = null;\n}\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "ffcc1ea6e83f2b82"
+            ]
+        ]
+    },
+    {
+        "id": "d767546a959d0556",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Umbrales feedback",
+        "func": "// Obtener el contenido del mensaje\nvar messageContent = msg.payload.content;\n\nif (messageContent.includes(\"UmbralTemp\")) {\n    msg.payload = {\n        chatId: -945976936,\n        type: 'message',\n        content: \"Cambiando umbral de temperatura\",\n        options: {\n            parse_mode: \"HTML\"\n        }\n    }\n}\n\n// Devolver el objeto `msg`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 360,
+        "wires": [
+            [
+                "45b62414b72fdaba"
+            ]
+        ]
+    },
+    {
+        "id": "ffcc1ea6e83f2b82",
+        "type": "mqtt out",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "GreenHouse/Thresholds/Temp",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "dacdbc14c8414c19",
+        "x": 670,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "dacdbc14c8414c19",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.1.51",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "262bb7894dbc199c",
+        "type": "telegram bot",
+        "botname": "PipoteBot",
+        "usernames": "",
+        "chatids": "-945976936",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    }
+]
